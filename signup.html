@@ -63,6 +63,7 @@
         <input id="lastName" placeholder="Last Name" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" required>
         <input id="email" placeholder="Email" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="email" required>
         <p id="emailError" class="text-red-400 text-sm hidden mb-4">Email must be in a valid format (e.g., user@example.com).</p>
+        <input id="citizenId" placeholder="Citizen Identification (12 digits)" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" pattern="\d{12}" title="Citizen Identification must be exactly 12 digits" required>
         <input id="password" placeholder="Password" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="password" required>
         <p class="text-sm text-gray-400 mb-4">Password should be at least 15 characters OR at least 8 characters including a number and a lowercase letter.</p>
         <input id="confirmPassword" placeholder="Confirm Password" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="password" required>
@@ -75,6 +76,8 @@
         </select>
         <label class="text-sm mb-2 text-gray-400 cursor-pointer" for="age">Date of Birth</label>
         <input id="age" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="date" required>
+        <input id="district" placeholder="District" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" required>
+        <input id="city" placeholder="City" class="bg-[#2A2A2A] text-gray-100 border-0 rounded-md p-2 mb-4 focus:bg-[#333333] focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" required>
         <p id="errorMessage" class="text-red-400 text-sm hidden mt-4"></p>
         <button class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:from-blue-600 hover:to-indigo-600 transition ease-in-out duration-150" type="submit">Sign Up</button>
       </form>
@@ -94,56 +97,61 @@
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
+    const citizenId = document.getElementById('citizenId');
+    const district = document.getElementById('district');
+    const city = document.getElementById('city');
     const errorMessage = document.getElementById('errorMessage');
     const successAlert = document.getElementById('successAlert');
     const closeAlert = document.getElementById('closeAlert');
 
-    // Validate the form on submit
     form.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent default form submission
-    let errors = [];
+      e.preventDefault();
+      let errors = [];
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    if (!emailRegex.test(email.value)) {
-      errors.push('Email must be in a valid format (e.g., user@example.com).');
-    }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      if (!emailRegex.test(email.value)) {
+        errors.push('Email must be in a valid format (e.g., user@example.com).');
+      }
 
-    // Validate password strength
-    const isValidPassword =
-      password.value.length >= 15 ||
-      (password.value.length >= 8 && /[a-z]/.test(password.value) && /\d/.test(password.value));
-    if (!isValidPassword) {
-      errors.push('Password must be at least 15 characters OR at least 8 characters including a number and a lowercase letter.');
-    }
+      const isValidPassword =
+        password.value.length >= 15 ||
+        (password.value.length >= 8 && /[a-z]/.test(password.value) && /\d/.test(password.value));
+      if (!isValidPassword) {
+        errors.push('Password must be at least 15 characters OR at least 8 characters including a number and a lowercase letter.');
+      }
 
-    // Validate password match
-    if (password.value !== confirmPassword.value) {
-      errors.push('Passwords do not match.');
-    }
+      if (password.value !== confirmPassword.value) {
+        errors.push('Passwords do not match.');
+      }
 
-    // Display errors (if any)
-    if (errors.length > 0) {
-      errorMessage.innerHTML = errors.join('<br>');
-      errorMessage.classList.remove('hidden');
-      successAlert.classList.add('hidden'); // Hide success alert if there are errors
-    } else {
-    // If no errors, hide the error message and display the success alert
-      errorMessage.classList.add('hidden');
-      successAlert.classList.remove('hidden');
+      if (!/\d{12}/.test(citizenId.value)) {
+        errors.push('Citizen Identification must be exactly 12 digits.');
+      }
 
-    // Redirect after 3 seconds
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 1500);
-  }
-});
+      if (!district.value.trim()) {
+        errors.push('District is required.');
+      }
 
-    // Close the alert button
+      if (!city.value.trim()) {
+        errors.push('City is required.');
+      }
+      
+      if (errors.length > 0) {
+        errorMessage.innerHTML = errors.join('<br>');
+        errorMessage.classList.remove('hidden');
+        successAlert.classList.add('hidden');
+      } else {
+        errorMessage.classList.add('hidden');
+        successAlert.classList.remove('hidden');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      }
+    });
+
     closeAlert.addEventListener('click', () => {
-    successAlert.classList.add('hidden');
-  });
-
+      successAlert.classList.add('hidden');
+    });
   </script>
 </body>
 </html>
