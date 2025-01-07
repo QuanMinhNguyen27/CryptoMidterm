@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanned QR Code Result</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-200 flex flex-col items-center justify-center h-screen">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+        <h2 class="text-2xl font-bold mb-4">QR Code Scanned Successfully</h2>
+
+        <p class="text-lg"><strong>Name:</strong> {{ user_info.full_name }}</p>
+        <p class="text-lg"><strong>Email:</strong> {{ user_info.email }}</p>
+        <p class="text-lg"><strong>Citizen ID:</strong> {{ user_info.citizen_id }}</p>
+        <p class="text-lg"><strong>Birth Date:</strong> {{ user_info.birth_date }}</p>
+        <p class="text-lg"><strong>Gender:</strong> {{ user_info.gender }}</p>
+        <p class="text-lg"><strong>District:</strong> {{ user_info.district }}</p>
+        <p class="text-lg"><strong>City:</strong> {{ user_info.city }}</p>
+
+        <a href="/" class="mt-6 inline-block bg-blue-600 px-4 py-2 rounded-md text-white hover:bg-blue-700">
+            Go Back to Home
+        </a>
+    </div>
+</body>
+</html>
